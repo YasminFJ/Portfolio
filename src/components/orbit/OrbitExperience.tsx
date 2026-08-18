@@ -73,8 +73,22 @@ export default function OrbitExperience() {
   );
 
   useEffect(() => {
+    // El primer ajuste ocurre en onCreated, pero justo después React Three
+    // Fiber ejecuta su propio ciclo interno de medición del contenedor y
+    // puede volver a dejar el canvas con un tamaño incorrecto. Repetimos el
+    // ajuste unos instantes después del montaje para que la corrección se
+    // mantenga una vez que ese primer ciclo interno ya ha terminado.
+    const raf = requestAnimationFrame(applyCanvasSize);
+    const retry1 = window.setTimeout(applyCanvasSize, 100);
+    const retry2 = window.setTimeout(applyCanvasSize, 500);
+
     window.addEventListener("resize", applyCanvasSize);
-    return () => window.removeEventListener("resize", applyCanvasSize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(retry1);
+      window.clearTimeout(retry2);
+      window.removeEventListener("resize", applyCanvasSize);
+    };
   }, [applyCanvasSize]);
 
   const focusOnPlanetId = (id: string) => {
