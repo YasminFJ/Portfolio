@@ -73,7 +73,22 @@ public/
 - Panel **Celestial Bodies**: acceso directo a cualquier planeta.
 - Easter egg: pasado un tiempo explorando aparece una señal desconocida que conduce a un agujero negro.
 
-Esta primera versión es 100% front-end (sin backend ni base de datos), pensada para desplegarse igual que el resto del portfolio. El documento `ORBIT_proyecto_portfolio.pdf` original contempla una versión más ambiciosa —nave controlable con físicas, misiones, perfil de usuario, partidas guardadas y ranking online con Node.js/Express y PostgreSQL— que queda como posible fase 2 del proyecto.
+El documento `ORBIT_proyecto_portfolio.pdf` original contempla una versión más ambiciosa —nave controlable con físicas, misiones, ranking online— que se irá añadiendo por fases.
+
+### Fase 2: cuentas y progreso guardado (Supabase)
+
+ORBIT ya tiene login, registro y guardado de progreso (planetas descubiertos y XP) usando [Supabase](https://supabase.com) como base de datos Postgres + autenticación, con rutas propias de Next.js (sin backend separado). Si no se configura, la web sigue funcionando con normalidad, simplemente sin guardar progreso.
+
+**Pasos para activarlo:**
+
+1. Crea una cuenta gratuita en [supabase.com](https://supabase.com) y un proyecto nuevo (elige una región cercana, ej. Europa).
+2. En el proyecto, ve a **SQL Editor → New query**, pega el contenido de `supabase/schema.sql` de este repositorio y pulsa **Run**. Esto crea la tabla de perfiles y sus permisos de seguridad (cada persona solo puede ver y editar su propio progreso).
+3. Ve a **Project Settings → API** y copia dos valores: **Project URL** y la clave **anon public**.
+4. En local: copia `.env.example` a `.env.local` y pega ahí esos dos valores.
+5. En Vercel: **Project → Settings → Environment Variables**, añade `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con los mismos valores, y vuelve a desplegar.
+6. Por defecto Supabase pide confirmar el email al registrarse. Para probar más rápido en desarrollo, puedes desactivarlo en **Authentication → Providers → Email → Confirm email**.
+
+A partir de ahí, en `/orbit` aparece un botón **Guardar progreso** para crear cuenta o iniciar sesión, y cada planeta que se visita queda guardado junto con la experiencia (XP) acumulada.
 
 ## Editar el contenido
 

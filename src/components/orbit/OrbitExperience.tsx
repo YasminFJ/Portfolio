@@ -11,7 +11,9 @@ import Planet from "@/components/orbit/Planet";
 import BlackHole from "@/components/orbit/BlackHole";
 import CameraRig, { type Focus } from "@/components/orbit/CameraRig";
 import Hud from "@/components/orbit/Hud";
+import AuthPanel from "@/components/orbit/AuthPanel";
 import { useAmbientAudio } from "@/components/orbit/useAmbientAudio";
+import { useOrbitProfile } from "@/components/orbit/useOrbitProfile";
 import { planets, sun } from "@/lib/planets";
 
 const BLACK_HOLE_POSITION: [number, number, number] = [46, 4, -20];
@@ -27,6 +29,16 @@ export default function OrbitExperience() {
   const focusRef = useRef<Focus>(null);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const { enabled: audioEnabled, toggle: toggleAudio } = useAmbientAudio();
+  const {
+    configured: supabaseConfigured,
+    authLoading,
+    session,
+    profile,
+    signIn,
+    signUp,
+    signOut,
+    discoverPlanet,
+  } = useOrbitProfile();
 
   useEffect(() => {
     const timeout = setTimeout(() => setSignalVisible(true), 22000);
@@ -46,12 +58,14 @@ export default function OrbitExperience() {
       position: new THREE.Vector3(target.orbitRadius, 0, 0),
       size: target.size,
     };
+    void discoverPlanet(id);
   };
 
   const handlePlanetSelect = (id: string, position: THREE.Vector3, size: number) => {
     setSelectedId(id);
     setBlackHoleActive(false);
     focusRef.current = { position: position.clone(), size };
+    void discoverPlanet(id);
   };
 
   const handleBlackHoleSelect = (position: THREE.Vector3) => {
@@ -132,6 +146,16 @@ export default function OrbitExperience() {
         signalVisible={signalVisible}
         onSelectSignal={() => handleBlackHoleSelect(new THREE.Vector3(...BLACK_HOLE_POSITION))}
         blackHoleActive={blackHoleActive}
+      />
+
+      <AuthPanel
+        configured={supabaseConfigured}
+        authLoading={authLoading}
+        isLoggedIn={session !== null}
+        profile={profile}
+        onSignIn={signIn}
+        onSignUp={signUp}
+        onSignOut={signOut}
       />
     </div>
   );
