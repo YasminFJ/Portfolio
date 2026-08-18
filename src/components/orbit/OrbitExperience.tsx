@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Canvas, type RootState } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
@@ -28,6 +28,8 @@ export default function OrbitExperience() {
 
   const focusRef = useRef<Focus>(null);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const rendererRef = useRef<RootState["gl"] | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const { enabled: audioEnabled, toggle: toggleAudio } = useAmbientAudio();
   const {
     configured: supabaseConfigured,
@@ -44,6 +46,36 @@ export default function OrbitExperience() {
     const timeout = setTimeout(() => setSignalVisible(true), 22000);
     return () => clearTimeout(timeout);
   }, []);
+
+  // React Three Fiber redimensiona el canvas automáticamente observando su
+  // contenedor, pero en algunos entornos de producción esa primera medición
+  // no llega a dispararse y el canvas se queda al tamaño por defecto del
+  // navegador (300x150). Como red de seguridad, sincronizamos el tamaño del
+  // renderer y la cámara a mano con el viewport real.
+  const applyCanvasSize = useCallback(() => {
+    const gl = rendererRef.current;
+    const camera = cameraRef.current;
+    if (!gl || !camera) return;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    gl.setSize(width, height, true);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }, []);
+
+  const handleCreated = useCallback(
+    (state: RootState) => {
+      rendererRef.current = state.gl;
+      cameraRef.current = state.camera as THREE.PerspectiveCamera;
+      applyCanvasSize();
+    },
+    [applyCanvasSize]
+  );
+
+  useEffect(() => {
+    window.addEventListener("resize", applyCanvasSize);
+    return () => window.removeEventListener("resize", applyCanvasSize);
+  }, [applyCanvasSize]);
 
   const focusOnPlanetId = (id: string) => {
     const target = planets.find((p) => p.id === id);
@@ -87,6 +119,7 @@ export default function OrbitExperience() {
     <div className="relative h-screen w-screen overflow-hidden bg-[#03040a]">
       <Canvas
         camera={{ position: [0, 20, 34], fov: 50, near: 0.1, far: 500 }}
+        onCreated={handleCreated}
         onPointerMissed={() => {
           setSelectedId(null);
           setBlackHoleActive(false);
