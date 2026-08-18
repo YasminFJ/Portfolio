@@ -73,20 +73,35 @@ export default function OrbitExperience() {
   );
 
   useEffect(() => {
-    // El primer ajuste ocurre en onCreated, pero justo después React Three
-    // Fiber ejecuta su propio ciclo interno de medición del contenedor y
-    // puede volver a dejar el canvas con un tamaño incorrecto. Repetimos el
-    // ajuste unos instantes después del montaje para que la corrección se
-    // mantenga una vez que ese primer ciclo interno ya ha terminado.
-    const raf = requestAnimationFrame(applyCanvasSize);
-    const retry1 = window.setTimeout(applyCanvasSize, 100);
-    const retry2 = window.setTimeout(applyCanvasSize, 500);
+    // El primer ajuste ocurre en onCreated, pero React Three Fiber vuelve a
+    // ejecutar su propio ciclo interno de medición del contenedor en un
+    // instante que no es predecible (depende de la carga de la página) y,
+    // en este entorno concreto, ese ciclo termina dejando el canvas otra
+    // vez al tamaño por defecto del navegador (300x150). En lugar de
+    // reforzar el ajuste solo en los primeros instantes, vigilamos el
+    // tamaño real del canvas en cada frame durante toda la vida del
+    // componente: si alguna vez difiere del tamaño de la ventana, lo
+    // corregimos de inmediato. La comprobación es una simple resta de
+    // números, así que el coste es insignificante.
+    let rafId: number;
+    const guard = () => {
+      const gl = rendererRef.current;
+      if (gl) {
+        const canvas = gl.domElement;
+        const dpr = gl.getPixelRatio();
+        const expectedWidth = Math.round(window.innerWidth * dpr);
+        const expectedHeight = Math.round(window.innerHeight * dpr);
+        if (canvas.width !== expectedWidth || canvas.height !== expectedHeight) {
+          applyCanvasSize();
+        }
+      }
+      rafId = requestAnimationFrame(guard);
+    };
+    rafId = requestAnimationFrame(guard);
 
     window.addEventListener("resize", applyCanvasSize);
     return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(retry1);
-      window.clearTimeout(retry2);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", applyCanvasSize);
     };
   }, [applyCanvasSize]);
