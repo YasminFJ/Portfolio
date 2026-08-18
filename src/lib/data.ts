@@ -192,6 +192,16 @@ export const projects: Project[] = [
   },
 ];
 
+export const featuredProject = {
+  name: "ORBIT",
+  tagline: "Interactive Space Exploration Experience",
+  description:
+    "Un sistema solar 3D navegable, construido desde cero: planetas con datos reales, cámara libre, fichas informativas y una señal desconocida esperando ser descubierta.",
+  url: "/orbit",
+  cta: "Explorar",
+  tags: ["React", "TypeScript", "Three.js", "React Three Fiber"],
+};
+
 export const social = {
   email: `mailto:${profile.email}`,
   whatsapp: `https://wa.me/${profile.phone.replace(/\s|\+/g, "")}`,
