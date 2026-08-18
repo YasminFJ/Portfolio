@@ -83,8 +83,8 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
           className="relative mx-auto w-full max-w-xs sm:max-w-sm"
         >
-          <div className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-accent/30 to-accent-2/30 blur-2xl" />
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border">
+          <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-accent/12 to-accent-2/12 blur-xl" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border shadow-xl shadow-slate-900/10">
             <Image
               src="/images/yasmin.jpg"
               alt={profile.name}

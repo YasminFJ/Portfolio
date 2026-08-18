@@ -1,4 +1,4 @@
-import { MapPin, Clock, Briefcase } from "lucide-react";
+import { MapPin, Clock, Briefcase, GraduationCap } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { profile } from "@/lib/data";
 
@@ -6,6 +6,7 @@ const facts = [
   { icon: MapPin, label: profile.location },
   { icon: Clock, label: profile.availability },
   { icon: Briefcase, label: "Autónoma" },
+  { icon: GraduationCap, label: "Ingeniera Informática" },
 ];
 
 export default function About() {
@@ -27,7 +28,7 @@ export default function About() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <ul className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-6">
+          <ul className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-6 shadow-sm">
             {facts.map(({ icon: Icon, label }) => (
               <li key={label} className="flex items-center gap-3 text-sm text-foreground">
                 <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-alt text-accent">

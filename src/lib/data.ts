@@ -8,12 +8,12 @@ export const profile = {
   ],
   location: "Madrid, España",
   email: "fennoujabalyasmin@gmail.com",
-  phone: "+34 645 855 242",
+  phone: "+34 637 055 908",
   availability: "Disponibilidad inmediata",
   summary:
-    "Desarrolladora Full Stack autónoma especializada en React, Angular y Node.js, con un dominio profundo del ecosistema WordPress: WooCommerce, Elementor, Divi, migraciones de hosting y despliegue con FileZilla y Git. Diez años dirigiendo mi propio negocio me dieron la disciplina y la visión de producto que ahora aplico a cada proyecto web que construyo.",
+    "Nací en 1997 y desde siempre me ha tirado más entender cómo funcionan las cosas por dentro que quedarme con la superficie. Eso me llevó a estudiar Ingeniería Informática en la Universidad Europea, y más tarde a completar un máster en Desarrollo Web Full Stack y Diseño Gráfico, combinando la parte técnica con la sensibilidad visual. Soy una persona autodidacta y resolutiva: prefiero entender el problema completo antes de escribir una sola línea de código.",
   summaryExtra:
-    "Actualmente combino el desarrollo de interfaces con inteligencia artificial en Esphera con el mantenimiento y la creación de sitios web para clientes de XtraMakers, además de proyectos propios como autónoma.",
+    "Actualmente trabajo como freelancer, combinando mi colaboración en Esphera —una plataforma de gestión contable con inteligencia artificial— con el desarrollo web para los clientes de XtraMakers, una agencia de marketing. En paralelo, llevo también mis propios proyectos como autónoma.",
 };
 
 export type SkillGroup = {
@@ -24,15 +24,34 @@ export type SkillGroup = {
 export const skillGroups: SkillGroup[] = [
   {
     category: "Frontend",
-    items: ["React", "Angular", "Ionic", "TypeScript", "JavaScript", "HTML5", "CSS3"],
+    items: [
+      "React",
+      "Angular",
+      "Ionic",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "SASS/SCSS",
+      "jQuery",
+    ],
   },
   {
     category: "Backend",
-    items: ["Node.js", "Express", "APIs REST", "OpenAPI / Swagger"],
+    items: ["Node.js", "Express", "PHP", "APIs REST", "OpenAPI / Swagger"],
   },
   {
-    category: "WordPress & CMS",
-    items: ["WooCommerce", "Elementor", "Divi", "Migraciones", "Gestión de hosting", "FileZilla"],
+    category: "WordPress & hosting",
+    items: [
+      "WooCommerce",
+      "Elementor",
+      "Divi",
+      "Migraciones",
+      "Gestión de hosting",
+      "cPanel",
+      "Webmail",
+      "FileZilla",
+    ],
   },
   {
     category: "DevOps & control de versiones",
@@ -43,51 +62,60 @@ export const skillGroups: SkillGroup[] = [
     items: ["MySQL", "MongoDB"],
   },
   {
-    category: "Diseño UX/UI",
-    items: ["Figma", "Adobe XD"],
+    category: "Diseño & Adobe",
+    items: ["Figma", "Adobe XD", "Photoshop", "Illustrator"],
+  },
+  {
+    category: "Ofimática",
+    items: ["Excel", "Word", "PowerPoint"],
   },
 ];
 
-export type ExperienceItem = {
-  company: string;
-  role: string;
+export type TimelineItem = {
+  title: string;
+  place: string;
   period: string;
   description: string;
   tags: string[];
+  type: "formacion" | "trabajo";
 };
 
-export const experience: ExperienceItem[] = [
+export const timeline: TimelineItem[] = [
   {
-    company: "Esphera",
-    role: "Programadora Frontend",
-    period: "Actualidad",
+    title: "Grado en Ingeniería Informática",
+    place: "Universidad Europea",
+    period: "2015 — 2019",
     description:
-      "Desarrollo de interfaces en React para una plataforma de gestión contable con inteligencia artificial, orientada a empresas y gestorías que automatizan la lectura y contabilización de facturas.",
-    tags: ["React", "TypeScript", "IA"],
+      "Formación superior en desarrollo de software, bases de datos y arquitectura de sistemas.",
+    tags: ["Ingeniería del software", "Bases de datos"],
+    type: "formacion",
   },
   {
-    company: "XtraMakers",
-    role: "Desarrolladora Web",
-    period: "Actualidad",
-    description:
-      "Desarrollo, mantenimiento y despliegue de sitios web para los clientes de la agencia: WordPress, Elementor, Divi, WooCommerce, migraciones de hosting y resolución de incidencias.",
-    tags: ["WordPress", "Elementor", "WooCommerce"],
-  },
-  {
-    company: "Diseñadora Web y Desarrolladora Full Stack",
-    role: "Freelance",
+    title: "Diseñadora Web y Desarrolladora Full Stack",
+    place: "Freelance",
     period: "2018 — 2021",
     description:
       "Creación de sitios responsivos con HTML5, CSS3, JavaScript y React, integración de bases de datos SQL y NoSQL, y diseño de prototipos y flujos UX/UI en Figma y Adobe XD.",
-    tags: ["React", "MySQL", "MongoDB", "Figma"],
+    tags: ["React", "MySQL", "Figma"],
+    type: "trabajo",
   },
   {
-    company: "Centro de Peluquería y Belleza",
-    role: "Gerente y Propietaria",
-    period: "10 años",
+    title: "Máster en Desarrollo Web Full Stack y Diseño Gráfico",
+    place: "Centro de Estudios",
+    period: "2022 — 2024",
     description:
-      "Gestión integral de un negocio propio: operación, atención al cliente, formación y dirección de equipos, compatibilizando la gestión con estudios de tecnología.",
-    tags: ["Gestión", "Equipos", "Autónoma"],
+      "Especialización en desarrollo full stack moderno y diseño gráfico, profundizando en frameworks frontend, backend y herramientas de diseño.",
+    tags: ["Full Stack", "Diseño Gráfico"],
+    type: "formacion",
+  },
+  {
+    title: "Freelancer — Esphera & XtraMakers",
+    place: "Autónoma",
+    period: "Actualidad",
+    description:
+      "Colaboro con Esphera desarrollando interfaces en React para su plataforma de gestión contable con inteligencia artificial, y con XtraMakers, una agencia de marketing, desarrollando y manteniendo los sitios web de sus clientes.",
+    tags: ["React", "WordPress", "IA"],
+    type: "trabajo",
   },
 ];
 
@@ -167,4 +195,19 @@ export const projects: Project[] = [
 export const social = {
   email: `mailto:${profile.email}`,
   whatsapp: `https://wa.me/${profile.phone.replace(/\s|\+/g, "")}`,
+};
+
+export const codeSnippet = {
+  fileName: "ProjectCard.tsx",
+  lines: [
+    { tokens: [{ t: "comment", v: "// componente reutilizable para fichas de proyecto" }] },
+    { tokens: [{ t: "keyword", v: "export function" }, { t: "plain", v: " ProjectCard(" }, { t: "param", v: "{ name, tags, url }" }, { t: "plain", v: ") {" }] },
+    { tokens: [{ t: "keyword", v: "  return" }, { t: "plain", v: " (" }] },
+    { tokens: [{ t: "tag", v: "    <a" }, { t: "attr", v: " href" }, { t: "plain", v: "=" }, { t: "string", v: "{url}" }, { t: "tag", v: ">" }] },
+    { tokens: [{ t: "tag", v: "      <h3>" }, { t: "param", v: "{name}" }, { t: "tag", v: "</h3>" }] },
+    { tokens: [{ t: "tag", v: "      <TagList" }, { t: "attr", v: " items" }, { t: "plain", v: "=" }, { t: "string", v: "{tags}" }, { t: "tag", v: " />" }] },
+    { tokens: [{ t: "tag", v: "    </a>" }] },
+    { tokens: [{ t: "plain", v: "  );" }] },
+    { tokens: [{ t: "plain", v: "}" }] },
+  ],
 };
