@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:sql": "node --experimental-strip-types scripts/generate-seed.mts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

@@ -7,7 +7,7 @@
  * Rules: only verified information. Anything not confirmed by Yasmin is
  * either left out or flagged with `pendingConfirmation`.
  */
-import type { Capability, ExperienceItem, Project, SiteContent, TechGroup } from "../../src/lib/content/types";
+import type { Capability, ExperienceItem, Project, SiteContent, TechGroup } from "../../src/lib/content/types.ts";
 
 export const site: SiteContent = {
   name: "Yasmin Fennou Jabal",
