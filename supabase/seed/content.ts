@@ -333,7 +333,7 @@ export const projects: Project[] = [
       "Reported assignment issues traced to their root cause before changing any code",
     ],
     url: "https://www.supralaboris.com/",
-    cover: { path: "/images/projects/supralaboris-cover.jpg", alt: "Supra Laboris website homepage", kind: "cover" },
+    cover: null, // pending: authorised screenshot of the live site
     gallery: [],
   },
   {
@@ -523,7 +523,7 @@ export const projects: Project[] = [
     highlights: ["Blog section (in preparation, kept out of the menu and noindex until finished)"],
     verification: [],
     url: "https://boleroestudio.com/",
-    cover: { path: "/images/projects/bolero-cover.jpg", alt: "Bolero Estudio website homepage", kind: "cover" },
+    cover: null, // pending: authorised screenshot of the live site
     gallery: [],
   },
   // Secondary work — shown discreetly, no individual case study.
