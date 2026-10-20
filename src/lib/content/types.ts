@@ -99,6 +99,7 @@ export type SiteContent = {
   handHero: string[];
   handAbout: string;
   handContact: string;
+  languages?: { name: string; level: string }[];
 };
 
 export type HomeContent = {
