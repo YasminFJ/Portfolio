@@ -1,4 +1,4 @@
-import { Briefcase, Heart, MapPin, Monitor } from "lucide-react";
+import { Briefcase, Heart, Languages, MapPin, Monitor } from "lucide-react";
 import type { SiteContent } from "@/lib/content/types";
 
 const FACT_ICONS = [MapPin, Monitor, Briefcase, Heart];
@@ -104,6 +104,21 @@ export default function About({ site }: { site: SiteContent }) {
               );
             })}
           </ul>
+          {site.languages && site.languages.length > 0 && (
+            <div className="mt-7 border-t border-line pt-5">
+              <h3 className="flex items-center gap-2 text-[0.66rem] font-medium uppercase tracking-[0.18em] text-muted">
+                <Languages size={14} strokeWidth={1.6} className="text-accent" /> Languages
+              </h3>
+              <dl className="mt-3 space-y-2 text-[0.8rem]">
+                {site.languages.map((l) => (
+                  <div key={l.name} className="flex items-baseline justify-between gap-3">
+                    <dt className="text-ink">{l.name}</dt>
+                    <dd className="text-right text-[0.74rem] text-muted">{l.level}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
           <p aria-hidden className="hand mt-8 rotate-[-8deg] text-[1.35rem] text-charcoal/75">
             {site.handAbout}
           </p>

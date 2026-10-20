@@ -39,6 +39,12 @@ export const site: SiteContent = {
   handHero: ["Build", "Solve", "Improve", "Repeat"],
   handAbout: "Same curiosity, better systems.",
   handContact: "Good ideas build better futures.",
+  languages: [
+    { name: "Spanish", level: "Native" },
+    { name: "Arabic", level: "Native" },
+    { name: "English", level: "C2 · Full professional" },
+    { name: "French", level: "C1 · Professional working" },
+  ],
 };
 
 export const capabilities: Capability[] = [
