@@ -5,7 +5,7 @@ const ICONS = { cap: GraduationCap, book: BookOpen, laptop: Laptop, chart: Chart
 
 function Pin({ dark }: { dark?: boolean }) {
   return (
-    <span aria-hidden className="relative flex flex-col items-center">
+    <span aria-hidden className="relative ml-[3px] flex w-3.5 flex-col items-center">
       <span
         className={`h-3.5 w-3.5 rounded-full border-2 ${dark ? "border-ink bg-ink" : "border-accent bg-accent-soft"} shadow-[0_0_0_4px_var(--cream)]`}
       />
@@ -20,7 +20,7 @@ export default function Experience({ items, intro }: { items: ExperienceItem[]; 
 
   return (
     <section id="experience" className="section-band bg-paper/40">
-      <div className="shell py-14 md:py-16">
+      <div className="shell py-12 md:py-14">
         <div className="grid gap-6 md:grid-cols-[1fr_minmax(0,22rem)] md:items-end">
           <div data-reveal>
             <p className="eyebrow">Experience &amp; journey</p>
@@ -82,8 +82,8 @@ export default function Experience({ items, intro }: { items: ExperienceItem[]; 
               >
                 <header className="flex items-baseline justify-between gap-3 border-b border-line pb-4">
                   <div>
-                    <h3 className="font-serif text-[1.3rem] leading-tight text-ink">{r.organization}</h3>
-                    <p className="mt-1 text-[0.8rem] text-charcoal">{r.title}</p>
+                    <h3 className="font-serif text-[1.3rem] leading-tight text-ink">{r.kind === "freelance" ? r.title : r.organization}</h3>
+                    <p className="mt-1 text-[0.8rem] text-charcoal">{r.kind === "freelance" ? r.organization : r.title}</p>
                   </div>
                   <span className="shrink-0 text-[0.72rem] text-muted">{r.period}</span>
                 </header>

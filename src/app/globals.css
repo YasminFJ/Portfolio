@@ -89,6 +89,7 @@ body {
   background-size: 3px 3px;
 }
 
+@layer components {
 .shell {
   width: 100%;
   max-width: 78rem;
@@ -225,6 +226,8 @@ body {
 .tok-p { color: #e2ddd5; }
 .tok-s { color: #a9c48a; }
 .tok-n { color: #6b665e; }
+
+}
 
 /* ------------------------------------------------------------------
    Reveal-on-scroll. Content is visible by default; the hidden start

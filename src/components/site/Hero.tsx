@@ -17,9 +17,9 @@ export default function Hero({ site }: { site: SiteContent }) {
             "radial-gradient(60% 55% at 78% 30%, rgb(236 222 205 / 0.9), transparent 70%), radial-gradient(40% 40% at 10% 90%, rgb(241 233 222 / 0.9), transparent 70%)",
         }}
       />
-      <div className="shell grid items-center gap-12 pb-14 pt-10 lg:grid-cols-[1.02fr_1fr] lg:gap-6 lg:pb-16 lg:pt-12 xl:gap-10">
+      <div className="shell grid items-start gap-12 pb-14 pt-10 lg:grid-cols-[1.02fr_1fr] lg:gap-6 lg:pb-14 lg:pt-6 xl:gap-10">
         {/* Left column */}
-        <div className="relative z-10 max-w-[40rem]">
+        <div className="relative z-10 max-w-[42rem] lg:pt-8">
           <p className="eyebrow rise" style={{ ["--d" as string]: "40ms" }}>
             {site.role}
           </p>
@@ -42,7 +42,7 @@ export default function Hero({ site }: { site: SiteContent }) {
               <Mail size={16} /> Contact
             </a>
           </div>
-          <ul className="rise mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[0.8rem] text-charcoal" style={{ ["--d" as string]: "460ms" }}>
+          <ul className="rise mt-10 flex flex-wrap gap-x-6 gap-y-3 text-[0.78rem] xl:flex-nowrap text-charcoal" style={{ ["--d" as string]: "460ms" }}>
             {site.heroFacts.map((fact, i) => {
               const Icon = FACT_ICONS[i % FACT_ICONS.length];
               return (
@@ -57,7 +57,7 @@ export default function Hero({ site }: { site: SiteContent }) {
 
         {/* Right column: photo + code card + handwriting */}
         <div className="relative mx-auto w-full max-w-[34rem] lg:mx-0 lg:max-w-none">
-          <div className="relative lg:ml-[7%] lg:w-[64%]">
+          <div className="relative lg:ml-[5%] lg:w-[68%]">
             {/* handwritten note */}
             <p
               aria-hidden

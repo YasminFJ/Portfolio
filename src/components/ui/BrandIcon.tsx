@@ -1,4 +1,33 @@
 import * as icons from "simple-icons";
+import {
+  ArrowLeftRight,
+  Blocks,
+  Database,
+  LayoutTemplate,
+  MousePointerClick,
+  PenTool,
+  Receipt,
+  Server,
+  ShieldCheck,
+  Truck,
+  Webhook,
+  type LucideIcon,
+} from "lucide-react";
+
+/** Neutral line icons for technologies that have no brand mark. */
+const GENERIC: Record<string, LucideIcon> = {
+  "REST APIs": Webhook,
+  SQL: Database,
+  Holded: Receipt,
+  Sendcloud: Truck,
+  Divi: LayoutTemplate,
+  WPBakery: Blocks,
+  VPS: Server,
+  "DNS & SSL": ShieldCheck,
+  "Hosting & migrations": ArrowLeftRight,
+  Adobe: PenTool,
+  "UX/UI": MousePointerClick,
+};
 
 type SimpleIcon = { path: string; hex: string; title: string };
 
@@ -22,6 +51,10 @@ export default function BrandIcon({
   mono?: boolean;
 }) {
   const icon = slug ? lookup(slug) : undefined;
+  if (!icon && GENERIC[name]) {
+    const G = GENERIC[name];
+    return <G aria-hidden size={size} strokeWidth={1.6} className="shrink-0 text-charcoal/80" />;
+  }
   if (!icon) {
     return (
       <span

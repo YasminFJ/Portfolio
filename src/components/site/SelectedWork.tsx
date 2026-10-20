@@ -85,7 +85,7 @@ export default function SelectedWork({ projects, intro }: { projects: Project[];
 
   return (
     <section id="work" className="section-band">
-      <div className="shell py-14 md:py-16">
+      <div className="shell py-12 md:py-14">
         <div className="grid gap-6 md:grid-cols-[1fr_minmax(0,24rem)_auto] md:items-end">
           <div data-reveal>
             <p className="eyebrow">Featured projects</p>

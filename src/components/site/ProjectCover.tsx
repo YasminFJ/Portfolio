@@ -43,23 +43,24 @@ export default function ProjectCover({
       style={{ background: `linear-gradient(150deg, ${palettes[0]} 0%, ${palettes[1]} 100%)` }}
     >
       {/* browser chrome */}
-      <div className="mx-[7%] mt-[7%] flex flex-1 flex-col overflow-hidden rounded-t-[8px] border border-b-0 border-white/70 bg-paper/80 shadow-[0_18px_30px_-20px_rgb(43_38_34/0.45)]">
+      <div className="@container mx-[7%] mt-[7%] flex flex-1 flex-col overflow-hidden rounded-t-[8px] border border-b-0 border-white/70 bg-paper/80 shadow-[0_18px_30px_-20px_rgb(43_38_34/0.45)]">
         <div className="flex items-center gap-1 border-b border-line px-2.5 py-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-line-strong" />
           <span className="h-1.5 w-1.5 rounded-full bg-line-strong" />
           <span className="h-1.5 w-1.5 rounded-full bg-line-strong" />
         </div>
-        <div className="grid flex-1 grid-cols-[1.3fr_1fr] items-center gap-[6%] px-[8%]">
-          <div className="min-w-0">
-            <span className="block truncate font-serif text-[clamp(0.95rem,1.9vw,1.5rem)] leading-tight text-ink">{project.title}</span>
-            <span className="mt-1 block truncate text-[0.58rem] uppercase tracking-[0.18em] text-muted">{project.sector.split("·").pop()?.trim()}</span>
-            <span className="mt-3 flex gap-1.5">
-              <span className="h-1 w-10 rounded-full bg-charcoal/15" />
-              <span className="h-1 w-6 rounded-full bg-charcoal/10" />
-            </span>
-            <span className="mt-3 inline-block h-3 w-12 rounded-[3px] bg-charcoal/80" />
-          </div>
-          <div className="aspect-[4/5] rounded-[6px] border border-white/60" style={{ background: `linear-gradient(160deg, ${palettes[1]}, #cdb9a1)` }} />
+        <div className="flex flex-1 flex-col items-center justify-center px-[8%] text-center">
+          <span className="font-serif leading-[1.05] text-ink" style={{ fontSize: "clamp(0.85rem, 9cqi, 2.4rem)" }}>
+            {project.title}
+          </span>
+          <span className="mt-[3cqi] uppercase tracking-[0.18em] text-muted" style={{ fontSize: "clamp(0.5rem, 3.2cqi, 0.75rem)" }}>
+            {project.sector.split("·").pop()?.trim()}
+          </span>
+          <span className="mt-[4cqi] flex gap-1.5">
+            <span className="h-1 w-8 rounded-full bg-charcoal/20" />
+            <span className="h-1 w-4 rounded-full bg-accent/50" />
+            <span className="h-1 w-8 rounded-full bg-charcoal/20" />
+          </span>
         </div>
       </div>
     </div>

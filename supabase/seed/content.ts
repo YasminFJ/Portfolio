@@ -20,8 +20,7 @@ export const site: SiteContent = {
   availability: "Open to new opportunities",
   aboutHeading: "A developer who builds, solves and collaborates.",
   aboutParagraphs: [
-    "I'm Yasmin, a Full Stack Developer working with React, Next.js, TypeScript, Node.js, PostgreSQL and Supabase. I design and ship web applications, custom booking and payment flows, third-party integrations and the infrastructure that keeps them running.",
-    "I also work close to the people who use what I build: translating client needs into technical decisions, tracing problems to their root cause and making sure fixes are verified before they reach production.",
+    "I'm Yasmin, a Full Stack Developer with experience in React, Next.js, TypeScript, Node.js, PostgreSQL, Supabase, APIs, WordPress and WooCommerce. I build web applications, booking and payment flows and third-party integrations — and I work closely with clients and teams to turn their needs into reliable, verified solutions.",
   ],
   aboutFacts: ["Madrid, Spain", "Available for remote work", "Freelance & technical collaboration", "Open to new opportunities"],
   capabilitiesIntro:
@@ -107,7 +106,7 @@ export const experience: ExperienceItem[] = [
     id: "freelance",
     kind: "freelance",
     title: "Freelance Developer",
-    organization: "Independent clients",
+    organization: "Independent projects",
     period: "2023 – Present",
     pendingConfirmation: true, // exact start month
     summary: "Websites, e-commerce, integrations and technical support for independent clients.",

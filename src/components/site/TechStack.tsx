@@ -4,7 +4,7 @@ import type { TechGroup } from "@/lib/content/types";
 export default function TechStack({ groups, intro }: { groups: TechGroup[]; intro: string }) {
   return (
     <section id="stack" className="section-band">
-      <div className="shell py-14 md:py-16">
+      <div className="shell py-12 md:py-14">
         <div className="grid gap-6 md:grid-cols-[1fr_minmax(0,22rem)] md:items-end">
           <div data-reveal>
             <p className="eyebrow">Tech stack</p>

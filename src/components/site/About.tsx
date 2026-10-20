@@ -9,7 +9,7 @@ function AboutVisual() {
   return (
     <div
       aria-hidden
-      className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px] border border-line shadow-[var(--shadow-md)]"
+      className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px] lg:aspect-[16/9] border border-line shadow-[var(--shadow-md)]"
       style={{ background: "linear-gradient(160deg, #ece2d5 0%, #e3d6c5 55%, #d7c7b3 100%)" }}
     >
       {/* window light */}
@@ -63,7 +63,7 @@ function AboutVisual() {
 export default function About({ site }: { site: SiteContent }) {
   return (
     <section id="about" className="section-band bg-paper/40">
-      <div className="shell grid gap-10 py-14 md:py-16 lg:grid-cols-[0.95fr_1.25fr_0.62fr] lg:items-center lg:gap-10">
+      <div className="shell grid gap-10 py-12 md:py-14 lg:grid-cols-[0.95fr_1.25fr_0.62fr] lg:items-center lg:gap-10">
         <div data-reveal="left">
           <AboutVisual />
         </div>
