@@ -1,81 +1,306 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Design tokens — warm editorial palette (cream, sand, charcoal)
+   ------------------------------------------------------------------ */
 :root {
-  --background: #f7f8fb;
-  --surface: #ffffff;
-  --surface-alt: #f1f3f9;
-  --border: #e4e7ef;
-  --foreground: #14162b;
-  --muted: #5b607a;
-  --accent: #4338ca;
-  --accent-2: #b45309;
+  --cream: #f6f0e8;
+  --cream-2: #f1e9de;
+  --sand: #e7dccd;
+  --paper: #fbf8f3;
+  --ink: #1b1714;
+  --charcoal: #2b2622;
+  --muted: #6f655c;
+  --muted-2: #8f847a;
+  --line: #e3d8ca;
+  --line-strong: #d6c8b6;
+  --accent: #b0715a; /* terracotta dot / pins */
+  --accent-soft: #e9d4c7;
+  --code-bg: #1e1d1b;
+  --code-line: #33302c;
+  --green: #4f9d69;
+  --shadow-sm: 0 1px 2px rgb(43 38 34 / 0.05);
+  --shadow-md: 0 10px 30px -14px rgb(43 38 34 / 0.22);
+  --shadow-lg: 0 28px 60px -28px rgb(43 38 34 / 0.38);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-surface-alt: var(--surface-alt);
-  --color-border: var(--border);
-  --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-cream-2: var(--cream-2);
+  --color-sand: var(--sand);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
   --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
-  --font-sans: -apple-system, "Segoe UI", "Space Grotesk", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-accent-soft: var(--accent-soft);
+  --color-code: var(--code-bg);
+  --color-ok: var(--green);
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: var(--font-caveat), "Segoe Script", cursive;
+  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+  --shadow-soft: var(--shadow-md);
+  --shadow-lift: var(--shadow-lg);
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--accent);
-  color: #ffffff;
+  background: var(--ink);
+  color: var(--cream);
 }
 
-.text-gradient {
-  background: linear-gradient(90deg, var(--accent), #7c3aed);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-.section-shell {
+/* Subtle paper grain behind everything */
+.grain {
   position: relative;
-  max-width: 72rem;
+  isolation: isolate;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: radial-gradient(rgb(120 100 80 / 0.08) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@layer components {
+.shell {
+  width: 100%;
+  max-width: 78rem;
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .shell { padding-inline: 2rem; }
+}
+@media (min-width: 1280px) {
+  .shell { padding-inline: 2.5rem; }
 }
 
-@media (min-width: 1024px) {
-  .section-shell {
-    padding-inline: 2rem;
+.section-band {
+  border-top: 1px solid var(--line);
+}
+
+/* Editorial headings */
+.display {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  font-optical-sizing: auto;
+}
+.heading {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+}
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.hand {
+  font-family: var(--font-caveat), cursive;
+  color: var(--charcoal);
+  line-height: 1;
+}
+
+/* Cards */
+.card {
+  background: rgb(251 248 243 / 0.75);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.82rem;
+  color: var(--charcoal);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, background 0.25s ease;
+}
+.chip:hover {
+  border-color: var(--line-strong);
+  background: #fff;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--cream);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 10px;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn svg { transition: transform 0.25s ease; }
+.btn:hover svg.arrow { transform: translateX(3px); }
+.btn-dark {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: 0 8px 18px -10px rgb(27 23 20 / 0.6);
+}
+.btn-dark:hover { background: #000; transform: translateY(-1px); }
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  background: transparent;
+}
+.btn-ghost:hover { background: var(--paper); border-color: var(--charcoal); }
+
+/* Code card */
+.code-card {
+  background: linear-gradient(180deg, #232120 0%, #1a1918 100%);
+  color: #d9d3c9;
+  border-radius: 14px;
+  box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.04) inset;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.tok-c { color: #8b8478; font-style: italic; }
+.tok-k { color: #d7a46f; }
+.tok-p { color: #e2ddd5; }
+.tok-s { color: #a9c48a; }
+.tok-n { color: #6b665e; }
+
+}
+
+/* ------------------------------------------------------------------
+   Reveal-on-scroll. Content is visible by default; the hidden start
+   state only applies once JS has flagged <html class="js">.
+   ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-reveal="fade"] { transform: none; }
+.js [data-reveal="left"] { transform: translate3d(-18px, 0, 0); }
+.js [data-reveal="scale"] { transform: scale(0.97); }
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Timeline line draw */
+.js .timeline-line { transform: scaleX(0); transform-origin: left; transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.js .timeline-line.is-visible { transform: scaleX(1); }
+.js .timeline-line-v { transform: scaleY(0); transform-origin: top; transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.js .timeline-line-v.is-visible { transform: scaleY(1); }
+
+/* Above-the-fold entrance: pure CSS so it never waits for hydration */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-in {
+  from { opacity: 0; transform: scale(1.03); filter: saturate(0.85); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.rise { animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--d, 0ms); }
+.photo-in { animation: photo-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--d, 0ms); }
+
+@keyframes float-soft {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+.float-soft { animation: float-soft 7s ease-in-out infinite; }
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgb(79 157 105 / 0.45); }
+  70% { box-shadow: 0 0 0 7px rgb(79 157 105 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(79 157 105 / 0); }
+}
+.pulse-dot { animation: pulse-dot 2.4s ease-out 3; }
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+.draw-path {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: draw 1.6s 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-reveal],
+  .js .timeline-line,
+  .js .timeline-line-v {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
-}
-
-.card-glow {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 1px 2px rgba(20, 22, 43, 0.04);
-  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-}
-
-.card-glow:hover {
-  box-shadow: 0 16px 32px -12px rgba(67, 56, 202, 0.18);
-  border-color: rgba(67, 56, 202, 0.35);
-}
-
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-.caret {
-  animation: blink 1s step-start infinite;
+  .float-soft, .pulse-dot, .rise, .photo-in { animation: none !important; }
+  .draw-path { animation: none; stroke-dashoffset: 0; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
