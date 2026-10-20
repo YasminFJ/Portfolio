@@ -95,7 +95,8 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               {p.summary}
             </p>
           </div>
-          <dl className="rise grid gap-4 rounded-[14px] border border-line bg-paper/70 p-6 text-[0.85rem]" style={{ ["--d" as string]: "240ms" }}>
+          <div className="rise grid gap-4 rounded-[14px] border border-line bg-paper/70 p-6 text-[0.85rem]" style={{ ["--d" as string]: "240ms" }}>
+          <dl className="grid gap-4">
             <div>
               <dt className="text-[0.66rem] font-medium uppercase tracking-[0.18em] text-muted">Status</dt>
               <dd className="mt-1.5 flex flex-col items-start gap-1.5">
@@ -107,6 +108,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               <dt className="text-[0.66rem] font-medium uppercase tracking-[0.18em] text-muted">My role</dt>
               <dd className="mt-1 text-ink">{p.role}</dd>
             </div>
+          </dl>
             {(p.url || p.internalLink) && (
               <div className="flex flex-wrap gap-2.5 pt-1">
                 {p.internalLink && (
@@ -121,7 +123,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                 )}
               </div>
             )}
-          </dl>
+          </div>
         </div>
       </header>
 

@@ -52,6 +52,18 @@ export default function Header({ name }: { name: string }) {
     return () => io.disconnect();
   }, [isHome, pathname]);
 
+  // Mobile menu locks body scroll, so in-page jumps are done after unlocking.
+  const onMobileNav = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    setOpen(false);
+    if (!isHome) return;
+    e.preventDefault();
+    // Wait for the effect below to release the scroll lock before jumping.
+    window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      history.pushState(null, "", `#${id}`);
+    }, 60);
+  };
+
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -145,7 +157,7 @@ export default function Header({ name }: { name: string }) {
                   >
                     <a
                       href={href(item.id)}
-                      onClick={() => setOpen(false)}
+                      onClick={(e) => onMobileNav(e, item.id)}
                       className="flex items-center justify-between border-b border-line py-3.5 font-serif text-2xl text-ink"
                     >
                       {item.label}
@@ -154,7 +166,7 @@ export default function Header({ name }: { name: string }) {
                   </motion.li>
                 ))}
               </ul>
-              <a href={href("contact")} onClick={() => setOpen(false)} className="btn btn-dark mt-6 w-full">
+              <a href={href("contact")} onClick={(e) => onMobileNav(e, "contact")} className="btn btn-dark mt-6 w-full">
                 Let&apos;s work together <ArrowRight size={15} className="arrow" />
               </a>
             </nav>
