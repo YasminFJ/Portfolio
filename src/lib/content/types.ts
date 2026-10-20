@@ -4,7 +4,14 @@
  * the public, published rows the site is allowed to read.
  */
 
-export type ProjectStatus = "live" | "in_development" | "in_review" | "proposal" | "personal";
+export type ProjectStatus = "live" | "in_development" | "staging" | "in_review" | "proposal" | "personal";
+
+export type ProjectLink = {
+  label: string; // e.g. "Visit Website", "Visit USA Website"
+  url: string;
+  status?: ProjectStatus | null; // status of that specific site when it differs from the project
+  note?: string | null;
+};
 export type ProjectTier = "featured" | "main" | "secondary";
 
 export type ProjectMedia = {
@@ -33,7 +40,8 @@ export type Project = {
   integrations?: string[];
   highlights?: string[]; // features delivered
   verification?: string[];
-  url?: string | null; // only when publicly live and attributable
+  url?: string | null; // primary public URL (kept for compatibility)
+  links?: ProjectLink[]; // public websites shown as "Visit …" buttons
   cover?: ProjectMedia | null;
   gallery?: ProjectMedia[];
   internalLink?: string | null; // e.g. /orbit

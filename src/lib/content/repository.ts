@@ -69,6 +69,7 @@ type ProjectRow = {
   highlights: string[] | null;
   verification: string[] | null;
   url: string | null;
+  links: Project["links"] | null;
   internal_link: string | null;
   cover_image: string | null;
   cover_alt: string | null;
@@ -100,6 +101,7 @@ function mapProject(r: ProjectRow): Project {
     highlights: r.highlights ?? [],
     verification: r.verification ?? [],
     url: r.url,
+    links: r.links ?? [],
     internalLink: r.internal_link,
     cover,
     gallery: media.filter((m) => m.kind === "gallery").map((m) => ({ path: m.path, alt: m.alt, caption: m.caption, kind: "gallery" })),
@@ -107,7 +109,7 @@ function mapProject(r: ProjectRow): Project {
 }
 
 const PROJECT_COLUMNS =
-  "slug,title,sector,summary,status,status_note,role,tier,sort_order,stack,tags,context,problem,solution,architecture,integrations,highlights,verification,url,internal_link,cover_image,cover_alt,project_media(path,alt,caption,kind,sort_order)";
+  "slug,title,sector,summary,status,status_note,role,tier,sort_order,stack,tags,context,problem,solution,architecture,integrations,highlights,verification,url,links,internal_link,cover_image,cover_alt,project_media(path,alt,caption,kind,sort_order)";
 
 /* ------------------------------- queries -------------------------------- */
 

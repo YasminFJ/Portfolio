@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, CircleCheck, Rocket } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleCheck } from "lucide-react";
 import ProjectCover from "@/components/site/ProjectCover";
 import StatusBadge from "@/components/site/StatusBadge";
+import ProjectActions from "@/components/site/ProjectActions";
 import { getProject, getProjects } from "@/lib/content/repository";
 
 export const revalidate = 300;
@@ -109,17 +110,19 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               <dd className="mt-1 text-ink">{p.role}</dd>
             </div>
           </dl>
-            {(p.url || p.internalLink) && (
-              <div className="flex flex-wrap gap-2.5 pt-1">
-                {p.internalLink && (
-                  <Link href={p.internalLink} className="btn btn-dark !py-2.5 text-[0.8rem]">
-                    <Rocket size={15} /> Launch {p.title}
-                  </Link>
-                )}
-                {p.url && (
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="btn btn-ghost !py-2.5 text-[0.8rem]">
-                    Visit live site <ArrowUpRight size={15} />
-                  </a>
+            {((p.links && p.links.length > 0) || p.internalLink) && (
+              <div className="pt-1">
+                <ProjectActions project={p} showCaseStudy={false} />
+                {p.links?.some((l) => l.note) && (
+                  <ul className="mt-3 space-y-1 text-[0.72rem] leading-[1.5] text-muted">
+                    {p.links
+                      .filter((l) => l.note)
+                      .map((l) => (
+                        <li key={l.url}>
+                          <span className="text-charcoal">{l.label.replace(/^Visit /, "")}:</span> {l.note}
+                        </li>
+                      ))}
+                  </ul>
                 )}
               </div>
             )}

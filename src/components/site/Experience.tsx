@@ -15,7 +15,10 @@ function Pin({ dark }: { dark?: boolean }) {
 }
 
 export default function Experience({ items, intro }: { items: ExperienceItem[]; intro: string }) {
-  const roles = items.filter((i) => i.kind !== "education" && i.bullets?.length).sort((a, b) => b.sortOrder - a.sortOrder);
+  // Full Stack role first, then the rest from most recent.
+  const roles = items
+    .filter((i) => i.kind !== "education" && i.bullets?.length)
+    .sort((a, b) => Number(b.title.startsWith("Full Stack Developer")) - Number(a.title.startsWith("Full Stack Developer")) || b.sortOrder - a.sortOrder);
   const lastWorkId = [...items].filter((i) => i.kind === "work").sort((a, b) => b.sortOrder - a.sortOrder)[0]?.id;
 
   return (

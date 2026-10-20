@@ -32,16 +32,16 @@ out.push(
 // projects
 for (const p of projects) {
   out.push(
-    `insert into public.projects (slug, title, sector, summary, status, status_note, role, tier, sort_order, stack, tags, context, problem, solution, architecture, integrations, highlights, verification, url, internal_link, cover_image, cover_alt, featured, published) values (` +
+    `insert into public.projects (slug, title, sector, summary, status, status_note, role, tier, sort_order, stack, tags, context, problem, solution, architecture, integrations, highlights, verification, url, links, internal_link, cover_image, cover_alt, featured, published) values (` +
       [
         q(p.slug), q(p.title), q(p.sector), q(p.summary), q(p.status), q(p.statusNote ?? null), q(p.role), q(p.tier), q(p.sortOrder),
         arr(p.stack), arr(p.cardTags), q(p.context ?? null), q(p.problem ?? null), q(p.solution ?? null),
         arr(p.architecture), arr(p.integrations), arr(p.highlights), arr(p.verification),
-        q(p.url ?? null), q(p.internalLink ?? null), q(p.cover?.path ?? null), q(p.cover?.alt ?? null),
+        q(p.url ?? null), json(p.links ?? []), q(p.internalLink ?? null), q(p.cover?.path ?? null), q(p.cover?.alt ?? null),
         q(p.tier === "featured"), "true",
       ].join(", ") +
       ")",
-    "on conflict (slug) do update set title = excluded.title, sector = excluded.sector, summary = excluded.summary, status = excluded.status, status_note = excluded.status_note, role = excluded.role, tier = excluded.tier, sort_order = excluded.sort_order, stack = excluded.stack, tags = excluded.tags, context = excluded.context, problem = excluded.problem, solution = excluded.solution, architecture = excluded.architecture, integrations = excluded.integrations, highlights = excluded.highlights, verification = excluded.verification, url = excluded.url, internal_link = excluded.internal_link, cover_image = excluded.cover_image, cover_alt = excluded.cover_alt, featured = excluded.featured, published = excluded.published;"
+    "on conflict (slug) do update set title = excluded.title, sector = excluded.sector, summary = excluded.summary, status = excluded.status, status_note = excluded.status_note, role = excluded.role, tier = excluded.tier, sort_order = excluded.sort_order, stack = excluded.stack, tags = excluded.tags, context = excluded.context, problem = excluded.problem, solution = excluded.solution, architecture = excluded.architecture, integrations = excluded.integrations, highlights = excluded.highlights, verification = excluded.verification, url = excluded.url, links = excluded.links, internal_link = excluded.internal_link, cover_image = excluded.cover_image, cover_alt = excluded.cover_alt, featured = excluded.featured, published = excluded.published;"
   );
 }
 out.push("");

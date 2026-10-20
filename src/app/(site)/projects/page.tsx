@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import ProjectCover from "@/components/site/ProjectCover";
 import StatusBadge from "@/components/site/StatusBadge";
+import ProjectActions from "@/components/site/ProjectActions";
 import { getProjects } from "@/lib/content/repository";
 
 export const revalidate = 300;
@@ -36,23 +37,30 @@ export default async function ProjectsPage() {
         <ol className="shell divide-y divide-line">
           {main.map((p, i) => (
             <li key={p.slug} data-reveal className="py-10 md:py-12">
-              <Link
-                href={`/projects/${p.slug}`}
-                className={`group grid items-center gap-8 md:grid-cols-2 md:gap-12 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}
-              >
-                <div className="relative aspect-[16/10] overflow-hidden rounded-[14px] border border-line bg-sand shadow-[var(--shadow-sm)] transition-shadow duration-500 group-hover:shadow-[var(--shadow-md)]">
+              <article className={`group grid items-center gap-8 md:grid-cols-2 md:gap-12 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
+                <Link
+                  href={`/projects/${p.slug}`}
+                  tabIndex={-1}
+                  aria-hidden
+                  className="relative block aspect-[16/10] overflow-hidden rounded-[14px] border border-line bg-sand shadow-[var(--shadow-sm)] transition-shadow duration-500 group-hover:shadow-[var(--shadow-md)]"
+                >
                   <div className="absolute inset-0 transition-transform duration-[1000ms] ease-out group-hover:scale-[1.035]">
                     <ProjectCover project={p} sizes="(min-width: 768px) 46vw, 92vw" priority={i === 0} />
                   </div>
-                </div>
+                </Link>
                 <div>
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="font-mono text-[0.72rem] text-muted">{String(i + 1).padStart(2, "0")}</span>
                     <StatusBadge status={p.status} />
                   </div>
-                  <h2 className="heading mt-4 text-[2.1rem] text-ink sm:text-[2.5rem]">{p.title}</h2>
+                  <h2 className="heading mt-4 text-[2.1rem] text-ink sm:text-[2.5rem]">
+                    <Link href={`/projects/${p.slug}`} className="transition-colors hover:text-accent">
+                      {p.title}
+                    </Link>
+                  </h2>
                   <p className="mt-1 text-[0.8rem] uppercase tracking-[0.14em] text-muted">{p.sector}</p>
                   <p className="mt-4 max-w-[30rem] text-[0.92rem] leading-[1.7] text-charcoal/90">{p.summary}</p>
+                  {p.statusNote && <p className="mt-2 max-w-[30rem] text-[0.78rem] leading-[1.6] text-muted">{p.statusNote}</p>}
                   <ul className="mt-5 flex flex-wrap gap-1.5">
                     {p.stack.slice(0, 5).map((t) => (
                       <li key={t} className="tag">
@@ -60,12 +68,11 @@ export default async function ProjectsPage() {
                       </li>
                     ))}
                   </ul>
-                  <span className="mt-6 inline-flex items-center gap-2 text-[0.85rem] font-medium text-ink">
-                    Read case study
-                    <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
+                  <div className="mt-6">
+                    <ProjectActions project={p} />
+                  </div>
                 </div>
-              </Link>
+              </article>
             </li>
           ))}
         </ol>
