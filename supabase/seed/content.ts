@@ -84,7 +84,7 @@ export const experience: ExperienceItem[] = [
   {
     id: "universidad-europea",
     kind: "education",
-    title: "Computer Engineering",
+    title: "Bachelor's Degree in Computer Engineering",
     organization: "Universidad Europea",
     period: "2016 – 2020",
     summary: "Bachelor's degree in Computer Engineering: software development, databases and systems.",
@@ -94,11 +94,10 @@ export const experience: ExperienceItem[] = [
   {
     id: "cei-madrid",
     kind: "education",
-    title: "Master's Studies",
-    organization: "CEI Madrid",
-    period: "From 2022",
-    pendingConfirmation: true, // official title and end date
-    summary: "Master's-level training in graphic design and full stack web development.",
+    title: "Full Stack Developer",
+    organization: "CEI: Centro de Estudios de Innovación",
+    period: "Sep 2023 – Aug 2025",
+    summary: "Full stack web development training, including back-end development and SQL.",
     sortOrder: 20,
     icon: "book",
   },
@@ -176,9 +175,8 @@ export const experience: ExperienceItem[] = [
     kind: "education",
     title: "Master's in Full Stack Development",
     organization: "NET Digital School",
-    period: "2026 – In progress",
-    pendingConfirmation: true, // official title
-    summary: "Master's programme currently in progress.",
+    period: "2026 – Present",
+    summary: "Master's in Full Stack Development, currently in progress.",
     sortOrder: 60,
     icon: "spark",
   },
