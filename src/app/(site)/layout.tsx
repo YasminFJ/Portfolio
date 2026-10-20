@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import RevealObserver from "@/components/ui/RevealObserver";
 import { getSite } from "@/lib/content/repository";
+
+export const metadata: Metadata = {
+  title: { default: "Yasmin Fennou Jabal — Full Stack Developer", template: "%s — Yasmin Fennou Jabal" },
+};
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const site = await getSite();

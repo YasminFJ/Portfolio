@@ -34,11 +34,10 @@ const DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: TITLE, template: "%s — Yasmin Fennou Jabal" },
+  title: TITLE,
   description: DESCRIPTION,
   applicationName: "Yasmin Fennou Jabal",
   authors: [{ name: "Yasmin Fennou Jabal", url: SITE_URL }],
-  alternates: { canonical: "/" },
   robots: indexable ? { index: true, follow: true } : { index: false, follow: false },
   openGraph: {
     type: "website",

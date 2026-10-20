@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 
-// Se permite el rastreo a propósito: para que Google respete el "noindex"
-// (meta etiqueta en layout.tsx y cabecera X-Robots-Tag en next.config.ts)
-// necesita poder leer las páginas. Bloquear el rastreo aquí impediría verlo.
+// Crawling is allowed on purpose: for search engines to honour "noindex"
+// (meta tag in layout.tsx and X-Robots-Tag header in next.config.ts) they
+// must be able to read the pages. Blocking crawling here would hide it.
 export default function robots(): MetadataRoute.Robots {
-  return { rules: { userAgent: "*", allow: "/" } };
+  return { rules: { userAgent: "*", allow: "/" }, sitemap: "https://yasminfennou.com/sitemap.xml" };
 }
