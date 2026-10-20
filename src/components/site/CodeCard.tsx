@@ -25,7 +25,7 @@ export default function CodeCard() {
         <span className="h-2 w-2 rounded-full bg-[#5a5550]" />
         <span className="ml-3 text-[0.62rem] tracking-wide text-[#7d776d]">developer.ts</span>
       </div>
-      <pre className="overflow-hidden px-4 py-3.5 text-[0.62rem] leading-[1.75] sm:text-[0.68rem] xl:text-[0.7rem]">
+      <pre className="overflow-hidden px-4 py-3.5 text-[0.62rem] leading-[1.75] sm:text-[0.68rem] lg:text-[0.6rem] xl:text-[0.7rem]">
         <code>
           {LINES.map((line, i) => (
             <span key={i} className="block whitespace-pre">

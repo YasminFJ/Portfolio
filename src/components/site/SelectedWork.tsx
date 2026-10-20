@@ -9,7 +9,7 @@ function FeaturedCard({ p }: { p: Project }) {
   return (
     <Link
       href={`/projects/${p.slug}`}
-      className="group relative flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-[16px] bg-[#0b0d14] p-7 text-white shadow-[var(--shadow-lg)] sm:p-8 lg:h-full"
+      className="group relative flex min-h-[26rem] flex-col justify-between overflow-hidden rounded-[16px] bg-[#0b0d14] p-7 text-white shadow-[var(--shadow-lg)] sm:p-8 xl:h-full"
     >
       {p.cover && (
         <Image
@@ -101,21 +101,21 @@ export default function SelectedWork({ projects, intro }: { projects: Project[];
           </div>
         </div>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-[0.95fr_2.05fr] lg:gap-4">
+        <div className="mt-10 grid gap-4 xl:grid-cols-[0.95fr_2.05fr]">
           {featured && (
-            <div data-reveal="scale" className="lg:row-span-2">
+            <div data-reveal="scale" className="xl:row-span-2">
               <FeaturedCard p={featured} />
             </div>
           )}
           <div className="grid gap-4">
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {top.map((p, i) => (
                 <li key={p.slug} data-reveal style={{ ["--reveal-delay" as string]: `${i * 80}ms` }}>
                   <ProjectCard p={p} />
                 </li>
               ))}
             </ul>
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {bottom.map((p, i) => (
                 <li key={p.slug} data-reveal style={{ ["--reveal-delay" as string]: `${120 + i * 80}ms` }}>
                   <ProjectCard p={p} compact />
