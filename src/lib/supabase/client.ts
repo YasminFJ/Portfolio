@@ -1,19 +1,26 @@
 import { createBrowserClient } from "@supabase/ssr";
 
 /**
- * Cliente de Supabase para uso en componentes de cliente ("use client").
- * Requiere NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY en el
- * entorno (ver .env.example).
+ * Cliente de Supabase para componentes de cliente ("use client").
+ * Usa SOLO valores públicos: la URL del proyecto y la clave publishable
+ * (sb_publishable_...) o, por compatibilidad, la antigua clave anon.
+ * La clave service_role / secret NUNCA debe usarse aquí ni con prefijo NEXT_PUBLIC_.
  */
-export function createClient() {
+export function getSupabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const key =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return url && key ? { url, key } : null;
+}
 
-  if (!url || !anonKey) {
+export function createClient() {
+  const config = getSupabaseConfig();
+
+  if (!config) {
     throw new Error(
-      "Faltan las variables de entorno NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY. Revisa .env.local."
+      "Faltan NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Revisa .env.local (ver .env.example)."
     );
   }
 
-  return createBrowserClient(url, anonKey);
+  return createBrowserClient(config.url, config.key);
 }

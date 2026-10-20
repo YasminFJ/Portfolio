@@ -79,14 +79,12 @@ El documento `ORBIT_proyecto_portfolio.pdf` original contempla una versión más
 
 ORBIT ya tiene login, registro y guardado de progreso (planetas descubiertos y XP) usando [Supabase](https://supabase.com) como base de datos Postgres + autenticación, con rutas propias de Next.js (sin backend separado). Si no se configura, la web sigue funcionando con normalidad, simplemente sin guardar progreso.
 
-**Pasos para activarlo:**
+**Configuración actual:**
 
-1. Crea una cuenta gratuita en [supabase.com](https://supabase.com) y un proyecto nuevo (elige una región cercana, ej. Europa).
-2. En el proyecto, ve a **SQL Editor → New query**, pega el contenido de `supabase/schema.sql` de este repositorio y pulsa **Run**. Esto crea la tabla de perfiles y sus permisos de seguridad (cada persona solo puede ver y editar su propio progreso).
-3. Ve a **Project Settings → API** y copia dos valores: **Project URL** y la clave **anon public**.
-4. En local: copia `.env.example` a `.env.local` y pega ahí esos dos valores.
-5. En Vercel: **Project → Settings → Environment Variables**, añade `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con los mismos valores, y vuelve a desplegar.
-6. Por defecto Supabase pide confirmar el email al registrarse. Para probar más rápido en desarrollo, puedes desactivarlo en **Authentication → Providers → Email → Confirm email**.
+- Proyecto Supabase independiente: **`portfolio`** (ref `jbjincheriznduglwxbv`, región `eu-west-3`, plan gratuito).
+- Esquema versionado en `supabase/migrations/`: perfiles de ORBIT y tablas de contenido (`projects`, `technologies`, `experience`, `site_content`) con RLS de solo lectura pública para lo publicado, más el bucket público `portfolio-media`.
+- Variables (ver `.env.example`): `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Ambas son públicas. La clave `secret`/`service_role` nunca se usa en el frontend ni se sube a Git.
+- En local: `.env.local` (ignorado por Git). En Vercel: Project → Settings → Environment Variables (Production y Preview).
 
 A partir de ahí, en `/orbit` aparece un botón **Guardar progreso** para crear cuenta o iniciar sesión, y cada planeta que se visita queda guardado junto con la experiencia (XP) acumulada.
 
@@ -121,17 +119,10 @@ npm run lint
 
 ## Despliegue
 
-El proyecto está preparado para desplegarse en [Vercel](https://vercel.com) directamente desde un repositorio Git, sin configuración adicional (Vercel detecta Next.js automáticamente).
-
-1. Crear un repositorio vacío en GitLab.
-2. Conectar este proyecto y subirlo:
-   ```bash
-   git remote add origin <URL-de-tu-repositorio-gitlab>
-   git push -u origin main
-   ```
-3. En Vercel: **Add New Project** → importar el repositorio de GitLab → **Deploy**.
-
-Cada vez que se haga `git push` a la rama principal, Vercel volverá a desplegar la web automáticamente.
+- **Repositorio:** GitHub `YasminFJ/Portfolio`, conectado al proyecto `portfolio` de Vercel.
+- **Producción:** rama `main` → https://yasminfennou.com (`www.yasminfennou.com` redirige con 308 al dominio principal).
+- **Previsualizaciones:** cualquier otra rama o Pull Request genera un despliegue de prueba en Vercel (protegido con login de Vercel). Flujo recomendado: rama → PR → revisar la preview → merge a `main`.
+- **Indexación:** mientras `NEXT_PUBLIC_SITE_INDEXABLE` no sea `true`, todas las páginas llevan `noindex` (meta + cabecera `X-Robots-Tag`). No es una protección de acceso: la web es pública.
 
 ## Autora
 
