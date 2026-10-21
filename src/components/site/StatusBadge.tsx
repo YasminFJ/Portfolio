@@ -2,7 +2,7 @@ import type { ProjectStatus } from "@/lib/content/types";
 
 const LABELS: Record<ProjectStatus, string> = {
   live: "Published",
-  in_development: "In development",
+  in_development: "In progress",
   staging: "Staging",
   in_review: "In client review",
   proposal: "Proposal",
