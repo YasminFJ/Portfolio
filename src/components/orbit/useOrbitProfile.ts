@@ -68,7 +68,7 @@ export function useOrbitProfile() {
 
   const signUp = useCallback(
     async (email: string, password: string, username: string): Promise<AuthResult> => {
-      if (!supabase) return { error: "Supabase no está configurado." };
+      if (!supabase) return { error: "Saved progress is not configured." };
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -81,7 +81,7 @@ export function useOrbitProfile() {
 
   const signIn = useCallback(
     async (email: string, password: string): Promise<AuthResult> => {
-      if (!supabase) return { error: "Supabase no está configurado." };
+      if (!supabase) return { error: "Saved progress is not configured." };
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       return { error: error?.message ?? null };
     },

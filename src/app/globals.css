@@ -304,3 +304,24 @@ body {
     animation-duration: 0.01ms !important;
   }
 }
+
+/* ORBIT — labels rendered by drei <Html> and the horizontal body list */
+@layer components {
+  .orbit-label {
+    display: block;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.62);
+    text-shadow: 0 1px 6px rgb(0 0 0 / 0.9);
+    user-select: none;
+  }
+  .orbit-scroll {
+    scrollbar-width: none;
+  }
+  .orbit-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}

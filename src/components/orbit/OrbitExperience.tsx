@@ -1,223 +1,138 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef } from "react";
 import { Canvas, type RootState } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 
-import Starfield from "@/components/orbit/Starfield";
-import Planet from "@/components/orbit/Planet";
-import BlackHole from "@/components/orbit/BlackHole";
-import CameraRig, { type Focus } from "@/components/orbit/CameraRig";
-import Hud from "@/components/orbit/Hud";
-import AuthPanel from "@/components/orbit/AuthPanel";
+import Sun from "@/components/orbit/scene/Sun";
+import Planet from "@/components/orbit/scene/Planet";
+import Sky from "@/components/orbit/scene/Sky";
+import BlackHole from "@/components/orbit/scene/BlackHole";
+import CameraDirector from "@/components/orbit/scene/CameraDirector";
+import Hud from "@/components/orbit/hud/Hud";
 import { useAmbientAudio } from "@/components/orbit/useAmbientAudio";
 import { useOrbitProfile } from "@/components/orbit/useOrbitProfile";
-import { planets, sun } from "@/lib/planets";
+import { useOrbit } from "@/components/orbit/state/store";
+import { QUALITY_SETTINGS } from "@/components/orbit/state/quality";
+import { planets } from "@/lib/planets";
 
-const BLACK_HOLE_POSITION: [number, number, number] = [46, 4, -20];
+const BODY_ORDER = ["sun", ...planets.map((p) => p.id)];
+const SIGNAL_DELAY_MS = 22000;
 
 export default function OrbitExperience() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [timeScale, setTimeScale] = useState(1);
-  const [showOrbits, setShowOrbits] = useState(true);
-  const [showLabels, setShowLabels] = useState(true);
-  const [signalVisible, setSignalVisible] = useState(false);
-  const [blackHoleActive, setBlackHoleActive] = useState(false);
-
-  const focusRef = useRef<Focus>(null);
-  const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const quality = useOrbit((s) => s.quality);
+  const focusId = useOrbit((s) => s.focusId);
   const rendererRef = useRef<RootState["gl"] | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const { enabled: audioEnabled, toggle: toggleAudio } = useAmbientAudio();
-  const {
-    configured: supabaseConfigured,
-    authLoading,
-    session,
-    profile,
-    signIn,
-    signUp,
-    signOut,
-    discoverPlanet,
-  } = useOrbitProfile();
+  const { configured, authLoading, session, profile, signIn, signUp, signOut, discoverPlanet } = useOrbitProfile();
 
+  // The original easter egg: an unidentified signal appears after a while.
   useEffect(() => {
-    const timeout = setTimeout(() => setSignalVisible(true), 22000);
-    return () => clearTimeout(timeout);
+    const t = setTimeout(() => useOrbit.getState().revealSignal(), SIGNAL_DELAY_MS);
+    return () => clearTimeout(t);
   }, []);
 
-  // React Three Fiber redimensiona el canvas automáticamente observando su
-  // contenedor, pero en algunos entornos de producción esa primera medición
-  // no llega a dispararse y el canvas se queda al tamaño por defecto del
-  // navegador (300x150). Como red de seguridad, sincronizamos el tamaño del
-  // renderer y la cámara a mano con el viewport real.
+  // Discoveries are recorded when a planet is visited (signed-in explorers only, for now).
+  useEffect(() => {
+    if (focusId && planets.some((p) => p.id === focusId)) void discoverPlanet(focusId);
+  }, [focusId, discoverPlanet]);
+
+  // Keyboard: arrows cycle through bodies, Esc returns to the overview.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.closest("input, textarea")) return;
+      const s = useOrbit.getState();
+      if (e.key === "Escape") {
+        if (s.panel) s.setPanel(null);
+        else s.requestOverview();
+      } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        const i = BODY_ORDER.indexOf(s.focusId ?? "");
+        const d = e.key === "ArrowRight" ? 1 : -1;
+        s.focus(BODY_ORDER[(i + d + BODY_ORDER.length) % BODY_ORDER.length]);
+      } else if (e.key === " ") {
+        e.preventDefault();
+        s.togglePaused();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Safety net kept from the original build: in some production environments the
+  // first canvas measurement never fires and the canvas stays at 300×150. If the
+  // drawing buffer ever disagrees with the viewport, resize it.
   const applyCanvasSize = useCallback(() => {
     const gl = rendererRef.current;
     const camera = cameraRef.current;
     if (!gl || !camera) return;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    gl.setSize(width, height, true);
-    camera.aspect = width / height;
+    gl.setSize(window.innerWidth, window.innerHeight, true);
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   }, []);
 
-  const handleCreated = useCallback(
-    (state: RootState) => {
-      rendererRef.current = state.gl;
-      cameraRef.current = state.camera as THREE.PerspectiveCamera;
-      applyCanvasSize();
-    },
-    [applyCanvasSize]
-  );
-
   useEffect(() => {
-    // El primer ajuste ocurre en onCreated, pero React Three Fiber vuelve a
-    // ejecutar su propio ciclo interno de medición del contenedor en un
-    // instante que no es predecible (depende de la carga de la página) y,
-    // en este entorno concreto, ese ciclo termina dejando el canvas otra
-    // vez al tamaño por defecto del navegador (300x150). En lugar de
-    // reforzar el ajuste solo en los primeros instantes, vigilamos el
-    // tamaño real del canvas en cada frame durante toda la vida del
-    // componente: si alguna vez difiere del tamaño de la ventana, lo
-    // corregimos de inmediato. La comprobación es una simple resta de
-    // números, así que el coste es insignificante.
-    let rafId: number;
+    let raf = 0;
+    let frame = 0;
     const guard = () => {
-      const gl = rendererRef.current;
-      if (gl) {
-        const canvas = gl.domElement;
-        const dpr = gl.getPixelRatio();
-        const expectedWidth = Math.round(window.innerWidth * dpr);
-        const expectedHeight = Math.round(window.innerHeight * dpr);
-        if (canvas.width !== expectedWidth || canvas.height !== expectedHeight) {
-          applyCanvasSize();
+      // Checking every 30 frames is enough and keeps the loop idle.
+      if (++frame % 30 === 0) {
+        const gl = rendererRef.current;
+        if (gl) {
+          const dpr = gl.getPixelRatio();
+          const c = gl.domElement;
+          if (c.width !== Math.round(window.innerWidth * dpr) || c.height !== Math.round(window.innerHeight * dpr)) applyCanvasSize();
         }
       }
-      rafId = requestAnimationFrame(guard);
+      raf = requestAnimationFrame(guard);
     };
-    rafId = requestAnimationFrame(guard);
-
+    raf = requestAnimationFrame(guard);
     window.addEventListener("resize", applyCanvasSize);
     return () => {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(raf);
       window.removeEventListener("resize", applyCanvasSize);
     };
   }, [applyCanvasSize]);
 
-  const focusOnPlanetId = (id: string) => {
-    const target = planets.find((p) => p.id === id);
-    if (!target) return;
-    setSelectedId(id);
-    setBlackHoleActive(false);
-    // La posición mundial real se calcula dentro del propio Planet en cada
-    // frame; aquí solo aproximamos el radio orbital como punto de partida,
-    // el CameraRig la corrige suavemente en cuanto el planeta reporta su
-    // posición exacta a través de handlePlanetSelect.
-    focusRef.current = {
-      position: new THREE.Vector3(target.orbitRadius, 0, 0),
-      size: target.size,
-    };
-    void discoverPlanet(id);
-  };
-
-  const handlePlanetSelect = (id: string, position: THREE.Vector3, size: number) => {
-    setSelectedId(id);
-    setBlackHoleActive(false);
-    focusRef.current = { position: position.clone(), size };
-    void discoverPlanet(id);
-  };
-
-  const handleBlackHoleSelect = (position: THREE.Vector3) => {
-    setSelectedId("blackhole");
-    setBlackHoleActive(true);
-    focusRef.current = { position: position.clone(), size: 1.6 };
-  };
-
-  const handleReset = () => {
-    setSelectedId(null);
-    setBlackHoleActive(false);
-    focusRef.current = { position: new THREE.Vector3(0, 0, 0), size: 9 };
-    window.setTimeout(() => {
-      focusRef.current = null;
-    }, 1400);
-  };
-
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#03040a]">
+    <div className="fixed inset-0 h-[100dvh] w-screen overflow-hidden bg-[#020306]">
       <Canvas
-        camera={{ position: [0, 20, 34], fov: 50, near: 0.1, far: 500 }}
-        onCreated={handleCreated}
-        onPointerMissed={() => {
-          setSelectedId(null);
-          setBlackHoleActive(false);
+        dpr={QUALITY_SETTINGS[quality].dpr}
+        gl={{ antialias: true, powerPreference: "high-performance" }}
+        camera={{ position: [0, 40, 90], fov: 42, near: 0.05, far: 2400 }}
+        onCreated={(state) => {
+          rendererRef.current = state.gl;
+          cameraRef.current = state.camera as THREE.PerspectiveCamera;
+          state.gl.toneMapping = THREE.ACESFilmicToneMapping;
+          state.gl.toneMappingExposure = 1.05;
+          applyCanvasSize();
         }}
       >
-        <ambientLight intensity={0.22} />
-        <pointLight position={[0, 0, 0]} intensity={4.5} color="#fff2cc" distance={140} decay={1.6} />
-
-        <Starfield />
-
-        <mesh>
-          <sphereGeometry args={[sun.size, 48, 48]} />
-          <meshBasicMaterial color={sun.color} />
-        </mesh>
-        <mesh>
-          <sphereGeometry args={[sun.size * 1.25, 32, 32]} />
-          <meshBasicMaterial color={sun.color} transparent opacity={0.12} />
-        </mesh>
-
-        {planets.map((planet) => (
-          <Planet
-            key={planet.id}
-            data={planet}
-            timeScale={timeScale}
-            showOrbits={showOrbits}
-            showLabels={showLabels}
-            selected={selectedId === planet.id}
-            onSelect={(id, position) => handlePlanetSelect(id, position, planet.size)}
-          />
-        ))}
-
-        <BlackHole position={BLACK_HOLE_POSITION} onSelect={handleBlackHoleSelect} />
-
-        <CameraRig focusRef={focusRef} controlsRef={controlsRef} />
-        <OrbitControls
-          ref={controlsRef}
-          enablePan={false}
-          minDistance={4}
-          maxDistance={110}
-          rotateSpeed={0.5}
-          zoomSpeed={0.7}
-        />
+        <color attach="background" args={["#020306"]} />
+        <ambientLight intensity={0.11} color="#aebfff" />
+        <Suspense fallback={null}>
+          <Sky />
+          <Sun />
+          {planets.map((p) => (
+            <Planet key={p.id} data={p} />
+          ))}
+        </Suspense>
+        <BlackHole />
+        <CameraDirector />
       </Canvas>
 
       <Hud
-        selectedId={selectedId}
-        onSelectPlanet={focusOnPlanetId}
-        onReset={handleReset}
-        timeScale={timeScale}
-        onTimeScaleChange={setTimeScale}
-        showOrbits={showOrbits}
-        onToggleOrbits={() => setShowOrbits((v) => !v)}
-        showLabels={showLabels}
-        onToggleLabels={() => setShowLabels((v) => !v)}
         audioEnabled={audioEnabled}
         onToggleAudio={toggleAudio}
-        signalVisible={signalVisible}
-        onSelectSignal={() => handleBlackHoleSelect(new THREE.Vector3(...BLACK_HOLE_POSITION))}
-        blackHoleActive={blackHoleActive}
-      />
-
-      <AuthPanel
-        configured={supabaseConfigured}
-        authLoading={authLoading}
-        isLoggedIn={session !== null}
-        profile={profile}
-        onSignIn={signIn}
-        onSignUp={signUp}
-        onSignOut={signOut}
+        account={{
+          configured,
+          authLoading,
+          isLoggedIn: session !== null,
+          profile,
+          onSignIn: signIn,
+          onSignUp: signUp,
+          onSignOut: signOut,
+        }}
       />
     </div>
   );
