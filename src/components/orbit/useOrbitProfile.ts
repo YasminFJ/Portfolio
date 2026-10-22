@@ -12,7 +12,15 @@ type ProfileRow = {
   discovered_planets: string[];
 };
 
-type AuthResult = { error: string | null };
+type AuthResult = { error: string | null; code?: string };
+
+/** Where Supabase email links come back to: always the current site, never a fixed host. */
+function callbackUrl(flow: "signup" | "recovery") {
+  const url = new URL("/auth/callback", window.location.origin);
+  url.searchParams.set("next", "/orbit");
+  if (flow === "recovery") url.searchParams.set("flow", "recovery");
+  return url.toString();
+}
 
 export function useOrbitProfile() {
   const supabase = useMemo(() => {
@@ -72,7 +80,7 @@ export function useOrbitProfile() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { username } },
+        options: { data: { username }, emailRedirectTo: callbackUrl("signup") },
       });
       return { error: error?.message ?? null };
     },
@@ -83,6 +91,37 @@ export function useOrbitProfile() {
     async (email: string, password: string): Promise<AuthResult> => {
       if (!supabase) return { error: "Saved progress is not configured." };
       const { error } = await supabase.auth.signInWithPassword({ email, password });
+      return { error: error?.message ?? null, code: error?.code };
+    },
+    [supabase]
+  );
+
+  const resendConfirmation = useCallback(
+    async (email: string): Promise<AuthResult> => {
+      if (!supabase) return { error: "Saved progress is not configured." };
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: { emailRedirectTo: callbackUrl("signup") },
+      });
+      return { error: error?.message ?? null };
+    },
+    [supabase]
+  );
+
+  const requestPasswordReset = useCallback(
+    async (email: string): Promise<AuthResult> => {
+      if (!supabase) return { error: "Saved progress is not configured." };
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: callbackUrl("recovery") });
+      return { error: error?.message ?? null };
+    },
+    [supabase]
+  );
+
+  const updatePassword = useCallback(
+    async (password: string): Promise<AuthResult> => {
+      if (!supabase) return { error: "Saved progress is not configured." };
+      const { error } = await supabase.auth.updateUser({ password });
       return { error: error?.message ?? null };
     },
     [supabase]
@@ -122,6 +161,9 @@ export function useOrbitProfile() {
     signUp,
     signIn,
     signOut,
+    resendConfirmation,
+    requestPasswordReset,
+    updatePassword,
     discoverPlanet,
   };
 }

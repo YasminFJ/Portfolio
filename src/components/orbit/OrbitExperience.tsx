@@ -25,7 +25,20 @@ export default function OrbitExperience() {
   const rendererRef = useRef<RootState["gl"] | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const { enabled: audioEnabled, toggle: toggleAudio } = useAmbientAudio();
-  const { configured, authLoading, session, profile, signIn, signUp, signOut, discoverPlanet } = useOrbitProfile();
+  const { configured, authLoading, session, profile, signIn, signUp, signOut, resendConfirmation, requestPasswordReset, updatePassword, discoverPlanet } =
+    useOrbitProfile();
+
+  // Returning from an email link (/auth/callback): open the account panel with the result
+  // and remove the parameter from the address bar.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const status = url.searchParams.get("auth");
+    if (!status) return;
+    url.searchParams.delete("auth");
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    useOrbit.getState().setAuthStatus(status);
+    useOrbit.getState().setPanel("account");
+  }, []);
 
   // The original easter egg: an unidentified signal appears after a while.
   useEffect(() => {
@@ -132,6 +145,9 @@ export default function OrbitExperience() {
           onSignIn: signIn,
           onSignUp: signUp,
           onSignOut: signOut,
+          onResendConfirmation: resendConfirmation,
+          onRequestPasswordReset: requestPasswordReset,
+          onUpdatePassword: updatePassword,
         }}
       />
     </div>

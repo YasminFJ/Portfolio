@@ -21,6 +21,8 @@ type OrbitState = {
   overviewRequest: number;
   panel: "settings" | "account" | null;
   infoCollapsed: boolean;
+  /** Result of an email link handled by /auth/callback (confirmed, recovery, errors) */
+  authStatus: string | null;
 
   focus: (id: string | null) => void;
   requestOverview: () => void;
@@ -32,6 +34,7 @@ type OrbitState = {
   revealSignal: () => void;
   setPanel: (p: OrbitState["panel"]) => void;
   setInfoCollapsed: (v: boolean) => void;
+  setAuthStatus: (v: string | null) => void;
 };
 
 export const useOrbit = create<OrbitState>((set) => ({
@@ -47,6 +50,7 @@ export const useOrbit = create<OrbitState>((set) => ({
   overviewRequest: 0,
   panel: null,
   infoCollapsed: false,
+  authStatus: null,
 
   focus: (id) => set({ focusId: id, infoCollapsed: typeof window !== "undefined" && window.innerWidth < 640 }),
   requestOverview: () => set((s) => ({ focusId: null, overviewRequest: s.overviewRequest + 1 })),
@@ -58,6 +62,7 @@ export const useOrbit = create<OrbitState>((set) => ({
   revealSignal: () => set({ signalVisible: true }),
   setPanel: (p) => set({ panel: p }),
   setInfoCollapsed: (v) => set({ infoCollapsed: v }),
+  setAuthStatus: (v) => set({ authStatus: v }),
 }));
 
 /** Effective simulation speed (0 when paused). */
