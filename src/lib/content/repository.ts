@@ -113,7 +113,33 @@ const PROJECT_COLUMNS =
 
 /* ------------------------------- queries -------------------------------- */
 
+/**
+ * Real screenshots captured from each live site (or the authorised draft for
+ * projects still in development). Used only when the CMS has no cover set,
+ * so a cover chosen in Supabase always wins.
+ */
+const SCREENSHOTS: Record<string, string> = {
+  "grupo-cunado": "/images/projects/grupo-cunado.webp",
+  "diaz-y-asociados": "/images/projects/diaz-y-asociados-usa.webp",
+  "fundacion-mecerreyes": "/images/projects/fundacion-mecerreyes.webp",
+  "vitale-by-klein": "/images/projects/vitale-by-klein.webp",
+  ata: "/images/projects/ata.webp",
+  supralaboris: "/images/projects/supralaboris.webp",
+  "tapicero-barcelona": "/images/projects/tapicero-barcelona.webp",
+  "sierra-nevada-tns": "/images/projects/sierra-nevada-tns.webp",
+  "farmacia-ensanche-sur": "/images/projects/farmacia-ensanche-sur.webp",
+};
+
+function withScreenshot(p: Project): Project {
+  if (p.cover || !SCREENSHOTS[p.slug]) return p;
+  return { ...p, cover: { path: SCREENSHOTS[p.slug], alt: `${p.title} — screenshot of the website`, kind: "cover" } };
+}
+
 export async function getProjects(): Promise<Project[]> {
+  return (await loadProjects()).map(withScreenshot);
+}
+
+async function loadProjects(): Promise<Project[]> {
   if (fixtureMode()) return [...(await fixture()).projects].sort((a, b) => a.sortOrder - b.sortOrder);
   const { data, error } = await supabase()
     .from("projects")

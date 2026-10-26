@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import ProjectCover from "@/components/site/ProjectCover";
+import Laptop from "@/components/home/Laptop";
 import StatusBadge from "@/components/site/StatusBadge";
 import ProjectActions from "@/components/site/ProjectActions";
 import { getProjects } from "@/lib/content/repository";
@@ -21,7 +22,7 @@ export default async function ProjectsPage() {
   const secondary = projects.filter((p) => p.tier === "secondary");
 
   return (
-    <div className="pt-[4.5rem]">
+    <div>
       <section className="shell pb-10 pt-14 md:pt-20">
         <p className="eyebrow rise">Projects</p>
         <h1 className="display rise mt-5 max-w-[48rem] text-[3rem] text-ink sm:text-[4rem]" style={{ ["--d" as string]: "80ms" }}>
@@ -42,11 +43,21 @@ export default async function ProjectsPage() {
                   href={`/projects/${p.slug}`}
                   tabIndex={-1}
                   aria-hidden
-                  className="relative block aspect-[16/10] overflow-hidden rounded-[14px] border border-line bg-sand shadow-[var(--shadow-sm)] transition-shadow duration-500 group-hover:shadow-[var(--shadow-md)]"
+                  className="relative block overflow-hidden rounded-[14px] bg-sand px-[9%] pb-[7%] pt-[9%]"
                 >
-                  <div className="absolute inset-0 transition-transform duration-[1000ms] ease-out group-hover:scale-[1.035]">
-                    <ProjectCover project={p} sizes="(min-width: 768px) 46vw, 92vw" priority={i === 0} />
-                  </div>
+                  {p.cover ? (
+                    <Laptop
+                      src={p.cover.path}
+                      alt={p.cover.alt}
+                      sizes="(min-width: 768px) 40vw, 80vw"
+                      priority={i === 0}
+                      className="transition-transform duration-700 ease-out group-hover:-translate-y-1"
+                    />
+                  ) : (
+                    <div className="relative aspect-[16/10]">
+                      <ProjectCover project={p} sizes="(min-width: 768px) 40vw, 80vw" />
+                    </div>
+                  )}
                 </Link>
                 <div>
                   <div className="flex flex-wrap items-center gap-3">

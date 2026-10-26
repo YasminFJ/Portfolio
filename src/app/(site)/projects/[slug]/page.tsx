@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CircleCheck } from "lucide-react";
-import ProjectCover from "@/components/site/ProjectCover";
+import Laptop from "@/components/home/Laptop";
 import StatusBadge from "@/components/site/StatusBadge";
 import ProjectActions from "@/components/site/ProjectActions";
 import { getProject, getProjects } from "@/lib/content/repository";
@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
   };
 
   return (
-    <article className="pt-[4.5rem]">
+    <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Header */}
@@ -133,8 +133,8 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
       {/* Cover — only when an authorised image exists */}
       {p.cover && (
       <div className="shell">
-        <div className="photo-in relative aspect-[16/9] overflow-hidden rounded-[18px] border border-line bg-sand shadow-[var(--shadow-lg)] sm:aspect-[16/8]" style={{ ["--d" as string]: "200ms" }}>
-          <ProjectCover project={p} sizes="(min-width: 1280px) 1200px, 100vw" priority />
+        <div className="photo-in rounded-[18px] bg-sand px-[6%] pb-[5%] pt-[6%] sm:px-[12%]" style={{ ["--d" as string]: "200ms" }}>
+          <Laptop src={p.cover.path} alt={p.cover.alt} sizes="(min-width: 1280px) 900px, 90vw" priority />
         </div>
       </div>
       )}
