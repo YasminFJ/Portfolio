@@ -21,11 +21,11 @@ export default function TechSection({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
         <h2 id="tech-title" className="shrink-0 text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-ink">
           {t.technologies}
         </h2>
-        <span aria-hidden className="h-px flex-1 bg-line-strong" />
+        <span aria-hidden className="hidden h-px flex-1 bg-line-strong sm:block" />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}

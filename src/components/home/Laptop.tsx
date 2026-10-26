@@ -21,7 +21,7 @@ export default function Laptop({
     <div className={`relative ${className}`}>
       <div className="relative rounded-t-[10px] rounded-b-[3px] bg-[#1b1b1d] p-[2.2%] pb-[2.6%] shadow-[0_30px_60px_-30px_rgb(20_20_20/0.45)] ring-1 ring-black/10">
         <div className="absolute left-1/2 top-[0.9%] h-[0.9%] w-[0.9%] -translate-x-1/2 rounded-full bg-[#333]" aria-hidden />
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-white">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-[2px] bg-white">
           <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover object-top" />
         </div>
       </div>

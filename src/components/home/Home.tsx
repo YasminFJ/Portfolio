@@ -10,11 +10,11 @@ const TAG_EN: Record<string, string> = { Multilingüe: "Multilingual" };
 
 export function SectionHead({ id, title, link }: { id?: string; title: string; link?: { href: string; label: string; external?: boolean } }) {
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
       <h2 id={id} className="shrink-0 text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-ink">
         {title}
       </h2>
-      <span aria-hidden className="h-px flex-1 bg-line-strong" />
+      <span aria-hidden className="hidden h-px flex-1 bg-line-strong sm:block" />
       {link &&
         (link.external ? (
           <a href={link.href} target="_blank" rel="noopener noreferrer" className="group inline-flex shrink-0 items-center gap-2 text-[0.85rem] text-ink">
@@ -52,7 +52,7 @@ export function CvButton({ locale, className = "" }: { locale: Locale; className
 
 export default function Home({ locale }: { locale: Locale }) {
   const t = T[locale];
-  const projectsIndex = locale === "es" ? "/proyectos" : "/projects";
+  const projectsIndex = "/projects"; // case studies are written in English
 
   return (
     <div lang={locale}>
