@@ -9,8 +9,8 @@ export const CONTACT = {
   email: "fennoujabalyasmin@gmail.com",
   linkedin: "https://www.linkedin.com/in/yasmin-fennou-jabal",
   github: "https://github.com/YasminFJ",
-  /** PDF paths once the CVs are added to /public/cv. null → the button opens an email request instead. */
-  cv: { es: null as string | null, en: null as string | null },
+  /** CV PDFs in /public/cv. Set one to null and its button falls back to an email request. */
+  cv: { es: "/cv/Yasmin-Fennou-CV-ES.pdf" as string | null, en: "/cv/Yasmin-Fennou-CV-EN.pdf" as string | null },
 };
 
 export type FeaturedProject = {

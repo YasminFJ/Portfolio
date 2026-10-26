@@ -228,6 +228,37 @@ export default function Home({ locale }: { locale: Locale }) {
             </a>
           </div>
         </div>
+        <ul aria-label={locale === "es" ? "Enlaces de contacto" : "Contact links"} className="mt-5 flex flex-wrap gap-x-7 gap-y-3 text-[0.86rem] text-charcoal">
+          {CONTACT.cv.es && (
+            <li>
+              <a href={CONTACT.cv.es} download hrefLang="es" className="inline-flex items-center gap-1.5 hover:text-ink">
+                <Download size={14} aria-hidden /> CV {locale === "es" ? "en español" : "Spanish"}
+              </a>
+            </li>
+          )}
+          {CONTACT.cv.en && (
+            <li>
+              <a href={CONTACT.cv.en} download hrefLang="en" className="inline-flex items-center gap-1.5 hover:text-ink">
+                <Download size={14} aria-hidden /> CV {locale === "es" ? "en inglés" : "English"}
+              </a>
+            </li>
+          )}
+          <li>
+            <a href={`mailto:${CONTACT.email}`} className="hover:text-ink">
+              {CONTACT.email}
+            </a>
+          </li>
+          <li>
+            <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-ink">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={CONTACT.github} target="_blank" rel="noopener noreferrer" className="hover:text-ink">
+              GitHub
+            </a>
+          </li>
+        </ul>
       </section>
     </div>
   );
