@@ -18,9 +18,9 @@ export default async function OpengraphImage() {
 
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#f6f0e8", padding: "64px 72px", fontFamily: "Inter" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#f7f6f3", padding: "64px 72px", fontFamily: "Inter" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1, paddingRight: 48 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 20, letterSpacing: 4, color: "#2b2622" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 20, letterSpacing: 4, color: "#2b2b2b" }}>
             <div style={{ width: 10, height: 10, borderRadius: 10, background: "#b0715a" }} />
             FULL STACK DEVELOPER
           </div>
@@ -33,7 +33,7 @@ export default async function OpengraphImage() {
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {stack.map((s) => (
-              <div key={s} style={{ display: "flex", border: "1px solid #d6c8b6", background: "#fbf8f3", borderRadius: 10, padding: "7px 13px", fontSize: 18, color: "#2b2622" }}>
+              <div key={s} style={{ display: "flex", border: "1px solid #d4d2cc", background: "#ffffff", borderRadius: 10, padding: "7px 13px", fontSize: 18, color: "#2b2b2b" }}>
                 {s}
               </div>
             ))}

@@ -4,24 +4,25 @@
    Design tokens — warm editorial palette (cream, sand, charcoal)
    ------------------------------------------------------------------ */
 :root {
-  --cream: #f6f0e8;
-  --cream-2: #f1e9de;
-  --sand: #e7dccd;
-  --paper: #fbf8f3;
-  --ink: #1b1714;
-  --charcoal: #2b2622;
-  --muted: #6f655c;
-  --muted-2: #8f847a;
-  --line: #e3d8ca;
-  --line-strong: #d6c8b6;
-  --accent: #b0715a; /* terracotta dot / pins */
-  --accent-soft: #e9d4c7;
-  --code-bg: #1e1d1b;
-  --code-line: #33302c;
-  --green: #4f9d69;
-  --shadow-sm: 0 1px 2px rgb(43 38 34 / 0.05);
-  --shadow-md: 0 10px 30px -14px rgb(43 38 34 / 0.22);
-  --shadow-lg: 0 28px 60px -28px rgb(43 38 34 / 0.38);
+  /* Redesign v3 — neutral, corporate: off-white, graphite, one discreet accent */
+  --cream: #f7f6f3;
+  --cream-2: #f1f0ec;
+  --sand: #ecebe7;
+  --paper: #ffffff;
+  --ink: #141414;
+  --charcoal: #2b2b2b;
+  --muted: #5f5f5f;
+  --muted-2: #8a8a8a;
+  --line: #e6e4df;
+  --line-strong: #d4d2cc;
+  --accent: #2f4a6d; /* slate blue, used sparingly */
+  --accent-soft: #e3e8ef;
+  --code-bg: #161616;
+  --code-line: #2c2c2c;
+  --green: #2f7a52;
+  --shadow-sm: 0 1px 2px rgb(20 20 20 / 0.05);
+  --shadow-md: 0 12px 32px -16px rgb(20 20 20 / 0.22);
+  --shadow-lg: 0 30px 60px -30px rgb(20 20 20 / 0.35);
 }
 
 @theme inline {
@@ -79,6 +80,7 @@ body {
   isolation: isolate;
 }
 .grain::before {
+  display: none;
   content: "";
   position: absolute;
   inset: 0;
@@ -148,7 +150,7 @@ body {
 
 /* Cards */
 .card {
-  background: rgb(251 248 243 / 0.75);
+  background: #ffffff;
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: var(--shadow-sm);
